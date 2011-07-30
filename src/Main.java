@@ -8,6 +8,7 @@ public class Main {
 public static void main(String args[]) {
 	Person bob = new Person("Bob");
 	Person alice = new Person("Alice");
+	Person eve = new Person("Eve");
 	Bank bank = new Bank();
 	bank.createKonto(bob);
 	bank.createKonto(alice);
