@@ -7,7 +7,7 @@ import de.hdm.bereve.security.SecureObject;
 public class Main {
 public static void main(String args[]) {
 	Person bob = new Person("Bob");
-	Person alice = new Person("Alice");
+    Person alice = new Person("Adam");
 	Person eve = new Person("Eve");
 	Bank bank = new Bank();
 	bank.createKonto(bob);
