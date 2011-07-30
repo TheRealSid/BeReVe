@@ -43,6 +43,8 @@ public Integer getKontostand() {
  */
 @Override
 public Integer zahleAus(Integer betrag){
+	
+	
 	if(kontostand - betrag <=0) return null;
 	else kontostand -=betrag;
 	return kontostand;

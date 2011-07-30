@@ -1,7 +1,11 @@
 package de.hdm.bereve;
 
-public class Person {
+import de.hdm.bereve.security.SecureIdentity;
+
+public class Person extends SecureIdentity{
 	private String name;
+	private Integer id = 9;
+	public String foo="bar";
 	
 	public Person(String name) {
 		this.name = name;
