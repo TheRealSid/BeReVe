@@ -16,9 +16,9 @@ public class Bank {
 		person_konto.put(p,k);
 	}
 	
-	public SecureObject<Konto> getKonto(Person p){
-		Konto k = person_konto.get(p);
-		SecureObject<Konto> secObj = new SecureObject<Konto>(k);
+	public SecureObject<IKonto> getKonto(Person p){
+		IKonto k = person_konto.get(p);
+		SecureObject<IKonto> secObj = new SecureObject<IKonto>(k);
 		return secObj;
 	}
 }

@@ -1,5 +1,5 @@
 import de.hdm.bereve.Bank;
-import de.hdm.bereve.Konto;
+import de.hdm.bereve.IKonto;
 import de.hdm.bereve.Person;
 import de.hdm.bereve.security.SecureObject;
 
@@ -12,8 +12,8 @@ public static void main(String args[]) {
 	bank.createKonto(bob);
 	bank.createKonto(alice);
 	
-	SecureObject<Konto> konto_bob=bank.getKonto(bob);
-	SecureObject<Konto> konto_alice=bank.getKonto(alice);
+	SecureObject<IKonto> konto_bob=bank.getKonto(bob);
+	SecureObject<IKonto> konto_alice=bank.getKonto(alice);
 	
 	System.out.println(konto_bob);
 	System.out.println(konto_alice);
