@@ -21,7 +21,7 @@ public class SecurityProxy implements InvocationHandler {
 		SecurityCallback callback = (SecurityCallback) aobj[aobj.length - 2];
 		Integer tan = (Integer) aobj[aobj.length - 1];
 		Object[] args = Arrays.copyOfRange(aobj, 0, aobj.length - 2);
-		if (callback.equals(owner)) {
+		if (owner.equals(callback)) {
 			String methodName = method.getName();
 			Class[] parameterTypes = new Class[args.length];
 			int i = 0;

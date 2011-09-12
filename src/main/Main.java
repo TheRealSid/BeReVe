@@ -43,8 +43,13 @@ public class Main extends SecurityCallback{
 //			System.out.println("SOE caught");
 //		}
 //		konto.setGeld(5000,this);
-		Integer foo = konto.getGeld(bank,createTan());
+		konto.setGeld(10,this,createTan());
+		Integer foo = konto.getGeld(this,createTan());
 		System.out.println(foo);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		return true;
 	}
 
 
