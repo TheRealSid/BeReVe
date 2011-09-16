@@ -18,6 +18,11 @@ public class SecurityProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] aobj)
 			throws Exception {
+		if(aobj == null){
+			if(method.getName().equals("hashCode")){
+				return obj.hashCode();
+			}
+		}
 		SecurityCallback callback = (SecurityCallback) aobj[aobj.length - 2];
 		Integer tan = (Integer) aobj[aobj.length - 1];
 		Object[] args = Arrays.copyOfRange(aobj, 0, aobj.length - 2);

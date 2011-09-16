@@ -46,7 +46,9 @@ public class Person extends SecurityCallback implements IPerson  {
 	}
 	@Override
 	public void leben() {
-		partner.doSex(this,createTan());
+		System.out.println(name+" lebt");
+		if(partner != null)
+			partner.doSex(this,createTan());
 		if(freunde.size()>0){
 			try{
 			freunde.get(0).doSex(this,createTan());
