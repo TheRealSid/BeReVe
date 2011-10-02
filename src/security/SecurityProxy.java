@@ -23,10 +23,16 @@ public class SecurityProxy implements InvocationHandler {
 				return obj.hashCode();
 			}
 		}
-		SecurityCallback callback = (SecurityCallback) aobj[aobj.length - 2];
+		SecurityCallback caller = (SecurityCallback) aobj[aobj.length - 2];
 		Integer tan = (Integer) aobj[aobj.length - 1];
 		Object[] args = Arrays.copyOfRange(aobj, 0, aobj.length - 2);
-		if (owner.equals(callback)) {
+		
+		
+		if(ACL.getInstance().checkPermission(method,caller)){
+			
+		}
+		
+		if (owner.equals(caller)) {
 			String methodName = method.getName();
 			Class[] parameterTypes = new Class[args.length];
 			int i = 0;
@@ -36,7 +42,7 @@ public class SecurityProxy implements InvocationHandler {
 			}
 			Method realMethod = obj.getClass().getMethod(methodName,
 					parameterTypes);
-			Integer callbackTan = callback.getTan();
+			Integer callbackTan = caller.getTan();
 			if (callbackTan == null || !callbackTan.equals(tan))
 				throw new SecurityObjectException();
 			Object ret = realMethod.invoke(obj, args);

@@ -21,7 +21,7 @@ public class Stadt extends SecurityCallback{
 		personen.add(eve);
 		personen.add(john);
 		
-		//heiraten(bob,alice);
+		heiraten(bob,alice);
 //		freundschaft(bob,eve);
 //		freundschaft(eve,john);
 		

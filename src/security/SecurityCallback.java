@@ -2,8 +2,10 @@ package security;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import security.identity.IDObject;
 
-public abstract class SecurityCallback {
+
+public abstract class SecurityCallback extends IDObject{
 
 	private Integer tan;
 	private SecureRandom rnd;
