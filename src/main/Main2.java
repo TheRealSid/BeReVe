@@ -45,7 +45,7 @@ public class Main2 {
 			System.out.println("C ist nicht A");
 		
 		
-		SecureContext.removePerson(A);
+		SecureContext.removeObject(A);
 		
 		if(SecureContext.checkId(A) == IDCheckResult.REMOVED)
 			System.out.println("A ist nicht mehr...");

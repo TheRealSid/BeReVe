@@ -1,18 +1,18 @@
 <acl>
 	<instances>
 		<object class="person">
-			<id>Mallory</id>
-			<attr name="name">{"mallory"}</attr>
-			<attr name="partner"><ref obj="carol"/></attr>
-			<attr name="freunde">null</attr>
-			<attr name="konto">null</attr>
+			<id>mallory</id>
+			<attr name="name">{'mallory'}</attr>
+			<attr name="partner">{'carol'}</attr>
+			<attr name="freunde">{}</attr>
+			<attr name="konto">{}</attr>
 		</object>
 		<object class="person">
-			<id> carol </id>
-			<attr name="name">{"carol"}</attr>
-			<attr name="partner"> <ref obj="mallory"/> </attr>
-			<attr name="freunde">null</attr>
-			<attr name="konto">null</attr>
+			<id>carol</id>
+			<attr name="name">{'carol'}</attr>
+			<attr name="partner">{'mallory'}</attr>
+			<attr name="freunde">{}</attr>
+			<attr name="konto">{}</attr>
 		</object>
 	
 		<object class="stadt">
