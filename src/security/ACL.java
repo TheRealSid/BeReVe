@@ -24,6 +24,7 @@ import world.Stadt;
 public class ACL extends SecurityCallback {
 
 	private ArrayList<ObjectEntity> instanceList;
+	private ArrayList<>
 
 	private static ACL acl;
 

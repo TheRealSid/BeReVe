@@ -1,37 +1,43 @@
 <acl>
 	<instances>
-		<object class="person">
+		<object class="Person">
 			<id>mallory</id>
-			<attr name="name">{'mallory'}</attr>
-			<attr name="partner">{'carol'}</attr>
-			<attr name="freunde">{}</attr>
-			<attr name="konto">{}</attr>
+			<attr name="name">Mallory</attr>
+			<attr name="partner">carol</attr>
+			<attr name="freunde"></attr>
+			<attr name="konto"></attr>
 		</object>
-		<object class="person">
+		<object class="Person">
 			<id>carol</id>
-			<attr name="name">{'carol'}</attr>
-			<attr name="partner">{'mallory'}</attr>
-			<attr name="freunde">{}</attr>
-			<attr name="konto">{}</attr>
+			<attr name="name">Carol</attr>
+			<attr name="partner">mallory</attr>
+			<attr name="freunde"></attr>
+			<attr name="konto"></attr>
 		</object>
-	
-		<object class="stadt">
+		<object class="Stadt">
 			<id>123456</id>
 		</object>
-	
-	
 	</instances>
 
 	<permission>
 		<target scope="class">Person</target>
 		<method>*</method>
-		<caller scope="instance">Stadt$123456</caller>
+		<caller scope="instance">
+			<class>Stadt</class>
+			<instanceID>123456</instanceID>
+		</caller>
 	 </permission>
 	 
 	 <permission>
-		<target scope="instance">Person$Mallory</target>
+		<target scope="instance">
+			<class>Person</class>
+			<instanceID>mallory</instanceID>
+		</target>
 		<method>doSex</method>
 		<method>getKonto</method>
-		<caller scope="instance">Person$Carol</caller>
+		<caller scope="instance">
+			<class>Person</class>
+			<instanceID>carol</instanceID>
+		</caller>
 	 </permission>
 </acl>
