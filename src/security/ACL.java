@@ -24,7 +24,6 @@ import world.Stadt;
 public class ACL extends SecurityCallback {
 
 	private ArrayList<ObjectEntity> instanceList;
-	private ArrayList<>
 
 	private static ACL acl;
 
@@ -99,7 +98,8 @@ public class ACL extends SecurityCallback {
 		if (caller instanceof Stadt)
 			return true; // Work-a-round bis ACL infrastruktur steht
 		if (map.get(callee) != null
-				&& map.get(callee).getMethods().contains(method))
+				&& map.get(callee).getMethods().contains(method)
+				&& map.get(callee).getCaller().equals(caller))
 			return true;
 		return false;
 	}
