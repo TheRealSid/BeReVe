@@ -46,7 +46,7 @@ public class Person extends SecurityCallback implements IPerson  {
 	}
 	@Override
 	public void leben() {
-		System.out.println(this+" lebt");
+		System.out.println(name+" lebt");
 		if(partner != null)
 			partner.doSex(this,createTan());
 		if(freunde.size()>0){
@@ -60,8 +60,11 @@ public class Person extends SecurityCallback implements IPerson  {
 	}
 	@Override
 	public String toString() {
-		return "Person [name=" + name + ", partner=" + partner + ", freunde="
-				+ freunde + ", konto=" + konto + "]";
+		return name;
+	}
+	@Override
+	public void doSex() {
+		System.out.println(name+ ": OHHH YEAH!");
 	}
 
 }

@@ -1,9 +1,10 @@
 package world;
 
+import security.SecureInterface;
 import security.SecurityCallback;
 import bank.security.SKonto;
 
-public interface SPerson {
+public interface SPerson extends SecureInterface{
 	public String getName(SecurityCallback callback, Integer tan);
 	public Person setName(String name, SecurityCallback callback, Integer tan);
 	public SPerson getPartner(SecurityCallback callback, Integer tan);
@@ -16,4 +17,6 @@ public interface SPerson {
 	public void leben(SecurityCallback callback,
 			Integer tan);
 	public void doSex(SecurityCallback callback, Integer tan);
+	
+	public String toString();
 }

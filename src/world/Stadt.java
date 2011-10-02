@@ -5,6 +5,7 @@ import java.util.List;
 
 import bank.Bank;
 
+import security.ACL;
 import security.SecurityCallback;
 import security.SecurityProxy;
 
@@ -22,8 +23,8 @@ public class Stadt extends SecurityCallback{
 		personen.add(john);
 		
 		heiraten(bob,alice);
-//		freundschaft(bob,eve);
-//		freundschaft(eve,john);
+		freundschaft(bob,eve);
+		freundschaft(eve,john);
 		
 		dieBank.createKonto(bob,1000);
 		dieBank.createKonto(alice,9000);
@@ -33,7 +34,9 @@ public class Stadt extends SecurityCallback{
 	
 	private void heiraten(SPerson a, SPerson b){
 		a.setPartner(b,this,createTan());
+		ACL.getInstance().addPermission(a,b,"doSex");
 		b.setPartner(a,this,createTan());
+		ACL.getInstance().addPermission(b,a,"doSex");
 	}
 	private void freundschaft(SPerson a, SPerson b){
 		a.addFreund(b, this, createTan());
