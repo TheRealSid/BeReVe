@@ -19,18 +19,20 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import security.acl.ObjectEntity;
+import security.acl.PermissionEntity;
 import world.Stadt;
 
 public class ACL extends SecurityCallback {
 
 	private ArrayList<ObjectEntity> instanceList;
-	private ArrayList<>
-
+	private ArrayList<PermissionEntity> permissionList;
+	
 	private static ACL acl;
 
 	private ACL() {
 		super();
 		instanceList = new ArrayList<ObjectEntity>();
+		permissionList = new ArrayList<PermissionEntity>();
 	}
 
 	public static ACL getInstance() {
