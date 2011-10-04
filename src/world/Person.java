@@ -51,7 +51,7 @@ public class Person extends SecurityCallback implements IPerson  {
 			partner.doSex(this,createTan());
 		if(freunde.size()>0){
 			try{
-			freunde.get(0).doSex(this,createTan());
+		    	freunde.get(0).doSex(this,createTan());
 			}catch(Exception e){
 				System.out.println("Can't do sex with: "+ freunde.get(0));
 			}
