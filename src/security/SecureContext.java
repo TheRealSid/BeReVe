@@ -1,5 +1,6 @@
 package security;
 
+import security.acl.ACL;
 import security.identity.IDObject;
 import security.identity.IDObject.IDCheckResult;
 import security.identity.IdentityManager;

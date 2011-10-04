@@ -5,9 +5,9 @@ import java.util.List;
 
 import bank.Bank;
 
-import security.ACL;
 import security.SecurityCallback;
 import security.SecurityProxy;
+import security.acl.ACL;
 
 public class Stadt extends SecurityCallback{
 	private List<SPerson> personen = new ArrayList<SPerson>();

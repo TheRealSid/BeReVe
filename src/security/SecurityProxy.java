@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
+import security.acl.ACL;
 import security.identity.IDObject;
 
 public class SecurityProxy implements InvocationHandler {

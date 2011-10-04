@@ -1,4 +1,4 @@
-<acl>
+<BeReVeACL>
 	<instances>
 		<object class="Person">
 			<id>mallory</id>
@@ -18,26 +18,28 @@
 			<id>123456</id>
 		</object>
 	</instances>
-
-	<permission>
-		<target scope="class">Person</target>
-		<method>*</method>
-		<caller scope="instance">
-			<class>Stadt</class>
-			<instanceID>123456</instanceID>
-		</caller>
-	 </permission>
-	 
-	 <permission>
-		<target scope="instance">
-			<class>Person</class>
-			<instanceID>mallory</instanceID>
-		</target>
-		<method>doSex</method>
-		<method>getKonto</method>
-		<caller scope="instance">
-			<class>Person</class>
-			<instanceID>carol</instanceID>
-		</caller>
-	 </permission>
-</acl>
+	<permissions>
+		<permission>
+			<target scope="class">Person</target>
+			<methods>*</methods>
+			<caller scope="instance">
+				<class>Stadt</class>
+				<instanceID>123456</instanceID>
+			</caller>
+		 </permission>
+		 <permission>
+			<target scope="instance">
+				<class>Person</class>
+				<instanceID>mallory</instanceID>
+			</target>
+			<methods>
+				<method>doSex</method>
+				<method>getKonto</method>
+			</methods>
+			<caller scope="instance">
+				<class>Person</class>
+				<instanceID>carol</instanceID>
+			</caller>
+		 </permission>
+	 </permissions>
+</BeReVeACL>
