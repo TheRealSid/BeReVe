@@ -1,20 +1,20 @@
 <BeReVeACL>
 	<instances>
-		<object class="Person">
+		<object class="world.Person">
 			<id>mallory</id>
 			<attr name="name">Mallory</attr>
-			<attr name="partner">carol</attr>
+			<attr name="partner"><ref id="carol"/></attr>
 			<attr name="freunde"></attr>
 			<attr name="konto"></attr>
 		</object>
-		<object class="Person">
+		<object class="world.Person">
 			<id>carol</id>
 			<attr name="name">Carol</attr>
-			<attr name="partner">mallory</attr>
+			<attr name="partner"><ref id="mallory"/></attr>
 			<attr name="freunde"></attr>
 			<attr name="konto"></attr>
 		</object>
-		<object class="Stadt">
+		<object class="world.Stadt"  GlobalContext="true">
 			<id>123456</id>
 		</object>
 	</instances>

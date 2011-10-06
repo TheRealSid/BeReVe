@@ -2,7 +2,13 @@ package security.acl;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,7 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XML2ACLParser {
-	public static ArrayList<ObjectEntity> getInstancesFromACLFile(File aclFile)
+	public static Map<Object,Object> getInstancesFromACLFile(File aclFile)
 			throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
 				.newInstance();
@@ -26,7 +32,7 @@ public class XML2ACLParser {
 		Element instances = getFirstNamedElem(doc.getDocumentElement()
 				.getChildNodes(), "instances");
 
-		ArrayList<ObjectEntity> ret = new ArrayList<ObjectEntity>();
+		Map<Object, Object> ret = new HashMap<Object,Object>();
 
 		for (int i = 0; i < instances.getChildNodes().getLength(); i++) {
 			if (instances.getChildNodes().item(i).getNodeType() != Document.ELEMENT_NODE)
@@ -50,10 +56,56 @@ public class XML2ACLParser {
 						}
 					}
 				}
-				ret.add(item);
+				try {
+					Object obj = buildObject(item);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ret.put(item.getId(),item);
 			}
 		}
 		return ret;
+	}
+
+	private static Object buildObject(ObjectEntity item) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, InstantiationException {
+		Class clazz  = Class.forName(item.getClazz());
+		Set<String> keys = item.getAttributes().keySet();
+		Method[] methods = clazz.getMethods();
+		Constructor constructor = clazz.getConstructor();
+		Object obj = constructor.newInstance();
+		for(String key:keys){
+			for(Method method:methods){
+				if(method.getName().toLowerCase().equals(("set"+key.toLowerCase()))){
+					String value = item.getAttributes().get(key);
+					Object valueObj = parseToInstance(value);
+					method.invoke(obj, valueObj);
+				}
+			}
+		}
+		return obj;
+	}
+
+	private static Object parseToInstance(String value) {
+		Double.valueOf(value);
 	}
 
 	public static ArrayList<PermissionEntity> getPermissionsFromACLFile(
