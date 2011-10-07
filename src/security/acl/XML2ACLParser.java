@@ -105,7 +105,14 @@ public class XML2ACLParser {
 	}
 
 	private static Object parseToInstance(String value) {
-		Double.valueOf(value);
+		try {
+			Double d = Double.valueOf(value);
+			if (d - Math.floor(d) == 0)
+				return d.intValue();
+			else return d;
+		} catch (Exception e) {
+			return value;
+		}
 	}
 
 	public static ArrayList<PermissionEntity> getPermissionsFromACLFile(
@@ -141,31 +148,31 @@ public class XML2ACLParser {
 					allMethods = true;
 
 				String targetClass;
-				PermissionEntity.scope targetScope;
+				PermissionEntity.Scope targetScope;
 				if ("class".equals(targetScopeString)) {
 					targetClass = ((Element) permission.getElementsByTagName(
 							"target").item(0)).getTextContent();
-					targetScope = PermissionEntity.scope.CLASS;
+					targetScope = PermissionEntity.Scope.CLASS;
 				} else {
 					targetClass = ((Element) ((Element) permission
 							.getElementsByTagName("target").item(0))
 							.getElementsByTagName("class").item(0))
 							.getTextContent();
-					targetScope = PermissionEntity.scope.INSTANCE;
+					targetScope = PermissionEntity.Scope.INSTANCE;
 				}
 
 				String callerClass;
-				PermissionEntity.scope callerScope;
+				PermissionEntity.Scope callerScope;
 				if ("class".equals(callerScopeString)) {
 					callerClass = ((Element) permission.getElementsByTagName(
 							"caller").item(0)).getTextContent();
-					callerScope = PermissionEntity.scope.CLASS;
+					callerScope = PermissionEntity.Scope.CLASS;
 				} else {
 					callerClass = ((Element) ((Element) permission
 							.getElementsByTagName("caller").item(0))
 							.getElementsByTagName("class").item(0))
 							.getTextContent();
-					callerScope = PermissionEntity.scope.INSTANCE;
+					callerScope = PermissionEntity.Scope.INSTANCE;
 				}
 
 				PermissionEntity item = new PermissionEntity(targetScope,
@@ -180,7 +187,7 @@ public class XML2ACLParser {
 					}
 				}
 
-				if (targetScope == PermissionEntity.scope.INSTANCE) {
+				if (targetScope == PermissionEntity.Scope.INSTANCE) {
 					NodeList instances = ((Element) permission
 							.getElementsByTagName("target").item(0))
 							.getElementsByTagName("instanceID");
@@ -190,7 +197,7 @@ public class XML2ACLParser {
 					}
 				}
 
-				if (callerScope == PermissionEntity.scope.INSTANCE) {
+				if (callerScope == PermissionEntity.Scope.INSTANCE) {
 					NodeList instances = ((Element) permission
 							.getElementsByTagName("caller").item(0))
 							.getElementsByTagName("instanceID");

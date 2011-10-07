@@ -3,20 +3,21 @@ package security.acl;
 import java.util.ArrayList;
 
 public class PermissionEntity {
-	public static enum scope {
+	public static enum Scope {
 		INSTANCE, CLASS
 	}
 	
-	private scope targetScope;
-	private scope callerScope;
-	private String targetClass;
-	private String callerClass;
+	private Scope targetScope;
+	private Scope callerScope;
+	private Class<?> targetClass;
+	private Class<?> callerClass;
 	private ArrayList<String> methods;
 	private boolean allMethods;
-	private ArrayList<String> targetInstanceIDs;
-	private ArrayList<String> callerInstanceIDs;
+	private ArrayList<Object> targetInstances;
+	private ArrayList<Object> callerInstances;
+	private boolean isGlobalContext;
 	
-	public PermissionEntity(scope targetScope, scope callerScope,
+	public PermissionEntity(Scope targetScope, Scope callerScope,
 			String targetClass, String callerClass, boolean allMethods) {
 		this.targetScope = targetScope;
 		this.callerScope = callerScope;
@@ -41,11 +42,11 @@ public class PermissionEntity {
 		callerInstanceIDs.add(id);
 	}
 
-	public scope getTargetScope() {
+	public Scope getTargetScope() {
 		return targetScope;
 	}
 
-	public scope getCallerScope() {
+	public Scope getCallerScope() {
 		return callerScope;
 	}
 

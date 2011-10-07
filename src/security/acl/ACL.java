@@ -9,13 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import security.SecureInterface;
@@ -24,8 +19,9 @@ import world.Stadt;
 
 public class ACL extends SecurityCallback {
 
-	private ArrayList<ObjectEntity> instanceList;
+	private Map<Object,Object> instanceList;
 	private ArrayList<PermissionEntity> permissionList;
+	private Map<Object, Permission> map = new HashMap<Object, Permission>();
 
 	private static ACL acl;
 
@@ -39,9 +35,10 @@ public class ACL extends SecurityCallback {
 	public void parseACLFile() throws ParserConfigurationException, SAXException, IOException {
 		instanceList = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml"));
 		permissionList = XML2ACLParser.getPermissionsFromACLFile(new File("resource/acl.xml"));
+		for(PermissionEntity entity:permissionList){
+		}
 	}
 
-	private Map<Object, Permission> map = new HashMap<Object, Permission>();
 
 	public boolean checkPermission(Method m, Object callee, Object caller) {
 		return checkPermission(m.getName(), callee, caller);
