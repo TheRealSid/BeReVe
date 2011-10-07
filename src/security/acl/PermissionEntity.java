@@ -18,7 +18,7 @@ public class PermissionEntity {
 	private boolean isGlobalContext;
 	
 	public PermissionEntity(Scope targetScope, Scope callerScope,
-			String targetClass, String callerClass, boolean allMethods) {
+			Class<?> targetClass, Class<?> callerClass, boolean allMethods) {
 		this.targetScope = targetScope;
 		this.callerScope = callerScope;
 		this.targetClass = targetClass;
@@ -26,8 +26,8 @@ public class PermissionEntity {
 		this.allMethods = allMethods;
 		
 		methods = new ArrayList<String>();
-		targetInstanceIDs = new ArrayList<String>();
-		callerInstanceIDs = new ArrayList<String>();
+		targetInstances = new ArrayList<Object>();
+		callerInstances = new ArrayList<Object>();
 	}
 	
 	public void addMethod(String methodName) {
@@ -35,11 +35,11 @@ public class PermissionEntity {
 	}
 	
 	public void addTargetInstanceID(String id) {
-		targetInstanceIDs.add(id);
+		targetInstances.add(id);
 	}
 	
 	public void addCallerInstanceID(String id) {
-		callerInstanceIDs.add(id);
+		callerInstances.add(id);
 	}
 
 	public Scope getTargetScope() {
@@ -50,11 +50,11 @@ public class PermissionEntity {
 		return callerScope;
 	}
 
-	public String getTargetClass() {
+	public Class<?> getTargetClass() {
 		return targetClass;
 	}
 
-	public String getCallerClass() {
+	public Class<?> getCallerClass() {
 		return callerClass;
 	}
 
@@ -66,11 +66,19 @@ public class PermissionEntity {
 		return allMethods;
 	}
 
-	public ArrayList<String> getTargetInstanceIDs() {
-		return targetInstanceIDs;
+	public ArrayList<Object> getTargetInstanceIDs() {
+		return targetInstances;
 	}
 
-	public ArrayList<String> getCallerInstanceIDs() {
-		return callerInstanceIDs;
+	public ArrayList<Object> getCallerInstanceIDs() {
+		return callerInstances;
+	}
+	
+	public void setGlobalContext(boolean isGlobalContext) {
+		this.isGlobalContext = isGlobalContext;
+	}
+	
+	public boolean isGlobalContext() {
+		return isGlobalContext;
 	}
 }
