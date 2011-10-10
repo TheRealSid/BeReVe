@@ -21,7 +21,7 @@ public class SecurityProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] aobj)
 			throws Exception {
-		if(aobj == null){
+		if(aobj == null || aobj.length<2){
 			Method realMethod = obj.getClass().getMethod(method.getName());
 			return realMethod.invoke(obj);
 		}
@@ -33,6 +33,9 @@ public class SecurityProxy implements InvocationHandler {
 		
 		if(method.getName().equals("getObject") && ACL.getInstance().equals(caller)){
 			return obj;
+		}
+		if(method.getName().equals("isOwner") && ACL.getInstance().equals(caller)){
+			return owner.equals(args[0]);
 		}
 		
 		if(owner.equals(caller) || ACL.getInstance().checkPermission(method,obj,caller)){

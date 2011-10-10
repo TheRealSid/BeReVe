@@ -175,8 +175,8 @@ public class XML2ACLParser {
 					callerScope = PermissionEntity.Scope.INSTANCE;
 				}
 
-				PermissionEntity item = new PermissionEntity(targetScope,
-						callerScope, targetClass, callerClass, allMethods);
+//				PermissionEntity item = new PermissionEntity(targetScope,
+//						callerScope, targetClass, callerClass, allMethods);
 
 				if (!allMethods) {
 					NodeList methods = ((Element) permission

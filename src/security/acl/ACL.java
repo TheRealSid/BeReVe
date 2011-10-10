@@ -6,8 +6,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -15,16 +17,17 @@ import org.xml.sax.SAXException;
 
 import security.SecureInterface;
 import security.SecurityCallback;
-import world.Stadt;
+import security.acl.PermissionEntity.Scope;
 
 public class ACL extends SecurityCallback {
 
 	private Map<Object,Object> instanceList;
-	private ArrayList<PermissionEntity> permissionList;
-	private Map<Object, Permission> map = new HashMap<Object, Permission>();
+	private ArrayList<PermissionEntity> permissionList = new ArrayList<PermissionEntity>();
 
 	private static ACL acl;
+	private ACL() {
 
+		}
 	public static ACL getInstance() {
 		if (acl == null) {
 			acl = new ACL();
@@ -44,49 +47,64 @@ public class ACL extends SecurityCallback {
 		return checkPermission(m.getName(), callee, caller);
 	}
 
+	private Set<PermissionEntity> findPermissionWithRawObject(String method, Object callee, List<PermissionEntity> permissionList){
+		Set<PermissionEntity> result = new HashSet<PermissionEntity>();
+		
+		return result;
+	}
+
+	private Set<PermissionEntity> findPermission(String method, Object callee, List<PermissionEntity> permissionList){
+		Set<PermissionEntity> result = findPermissionWithRawObject( method, callee, permissionList);
+		for(PermissionEntity entity: permissionList){
+			if(entity.getTargetScope() == Scope.INSTANCE){
+				if(entity.getTargetInstances().contains(callee)){
+					if(entity.isAllMethods()){
+						result.add(entity);
+					} else if(entity.getMethods().contains(method)){
+						result.add(entity);
+					}
+				}
+			} else if(entity.getTargetScope() == Scope.CLASS){
+				if(entity.getTargetClass().equals(callee.getClass())){
+					if(entity.isAllMethods()){
+						result.add(entity);
+					} else if(entity.getMethods().contains(method)){
+						result.add(entity);
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	public boolean checkPermission(String method, Object callee, Object caller) {
-		if (caller instanceof Stadt)
-			return true; // Work-a-round bis ACL infrastruktur steht
-		if (map.get(callee) != null
-				&& map.get(callee).getMethods().contains(method)
-				&& map.get(callee).getCaller().equals(caller))
+		Set<PermissionEntity> permissions = findPermission(method, callee, permissionList);
+		for(PermissionEntity entity:permissions){
+			if(entity.getCallerScope() == Scope.INSTANCE){
+				if(entity.getCallerInstances().contains(caller)) return true;
+			}
+			else if(entity.getCallerScope() == Scope.CLASS){
+				if(entity.getCallerClass().equals(caller.getClass())) return true;
+			}
+		}
+		return false;
+		
+
+	}
+
+	public boolean addPermission(PermissionEntity entity, Integer tan, SecurityCallback caller) {
+		if(tan.equals(caller.getTan())){
+			for(SecureInterface target: entity.getTargetInstances()){
+				if(!target.isOwner(caller,this, createTan())){
+					return false;
+				}
+			}
+			permissionList.add(entity);
 			return true;
+		}
 		return false;
 	}
 
-	public void addPermission(Object a, Object b, String... methods) {
-		map.put(a, new Permission(b, Arrays.asList(methods)));
-	}
 
-	public void addPermission(SecureInterface a, SecureInterface b,
-			String... methods) {
-		addPermission(a.getObject(this, createTan()),
-				b.getObject(this, createTan()), methods);
-	}
-
-	private class Permission {
-		private Object caller;
-		private List<String> methods;
-
-		private Permission(Object caller, List<String> methods) {
-			this.setCaller(caller);
-			this.methods = methods;
-		}
-
-		public List<String> getMethods() {
-			return methods;
-		}
-
-		public void setMethods(List<String> methods) {
-			this.methods = methods;
-		}
-
-		public Object getCaller() {
-			return caller;
-		}
-
-		public void setCaller(Object caller) {
-			this.caller = caller;
-		}
-	}
+	
 }

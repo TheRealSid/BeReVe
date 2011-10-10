@@ -34,9 +34,9 @@ public class Stadt extends SecurityCallback{
 	
 	private void heiraten(SPerson a, SPerson b){
 		a.setPartner(b,this,createTan());
-		ACL.getInstance().addPermission(a,b,"doSex");
+//		ACL.getInstance().addPermission(a,b,"doSex");
 		b.setPartner(a,this,createTan());
-		ACL.getInstance().addPermission(b,a,"doSex");
+//		ACL.getInstance().addPermission(b,a,"doSex");
 	}
 	private void freundschaft(SPerson a, SPerson b){
 		a.addFreund(b, this, createTan());
