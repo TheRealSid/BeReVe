@@ -49,8 +49,26 @@ public class ACL extends SecurityCallback {
 
 	private Set<PermissionEntity> findPermissionWithRawObject(String method, Object callee, List<PermissionEntity> permissionList){
 		Set<PermissionEntity> result = new HashSet<PermissionEntity>();
-		
+		for(PermissionEntity entity: permissionList){
+			if(entity.getTargetScope()==Scope.INSTANCE){
+				if(secureInterfaces2Objects(entity.getTargetInstances()).contains(callee)){
+					if(entity.isAllMethods()){
+						result.add(entity);
+					} else if(entity.getMethods().contains(method)){
+						result.add(entity);
+					}
+				}
+			} 
+		}
 		return result;
+	}
+	
+	private Set<Object> secureInterfaces2Objects(List<SecureInterface> secureInterfaces){
+		Set<Object> objects = new HashSet<Object>();
+		for(SecureInterface si:secureInterfaces){
+			objects.add(si.getObject(this, createTan()));
+		}
+		return objects;
 	}
 
 	private Set<PermissionEntity> findPermission(String method, Object callee, List<PermissionEntity> permissionList){
