@@ -5,16 +5,22 @@ import java.util.HashMap;
 public class ObjectEntity {
 	private String clazz;
 	private String id;
-	private HashMap<String, String> attributes;
+	private HashMap<String, String> values;
+	private HashMap<String, String> references;
 	
 	public ObjectEntity(String clazz, String id) {
 		this.clazz = clazz;
 		this.id = id;
-		attributes = new HashMap<String, String>();
+		values = new HashMap<String, String>();
+		references = new HashMap<String, String>();
 	}
 	
-	public void addAttribute(String key, String val) {
-		attributes.put(key, val);
+	public void addValue(String key, String val) {
+		values.put(key, val);
+	}
+	
+	public void addReference(String key, String val) {
+		references.put(key, val);
 	}
 	
 	public String getClazz() {
@@ -25,7 +31,11 @@ public class ObjectEntity {
 		return id;
 	}
 
-	public HashMap<String, String> getAttributes() {
-		return attributes;
+	public HashMap<String, String> getValues() {
+		return values;
+	}
+	
+	public HashMap<String, String> getReferences() {
+		return references;
 	}
 }

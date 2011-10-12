@@ -18,6 +18,7 @@ public class Person extends SecurityCallback implements IPerson  {
 		super();
 		this.name = name;
 	}
+	
 	public String getName() {
 		return name;
 	}

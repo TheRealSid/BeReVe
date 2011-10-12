@@ -38,8 +38,8 @@ public class ACL extends SecurityCallback {
 	public void parseACLFile() throws ParserConfigurationException, SAXException, IOException {
 		instanceList = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml"));
 		permissionList = XML2ACLParser.getPermissionsFromACLFile(new File("resource/acl.xml"));
-		for(PermissionEntity entity:permissionList){
-		}
+		//for(PermissionEntity entity:permissionList){
+		//}
 	}
 
 

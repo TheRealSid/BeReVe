@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XML2ACLParser {
-	public static Map<Object,Object> getInstancesFromACLFile(File aclFile)
+	public static Map<Object, Object> getInstancesFromACLFile(File aclFile)
 			throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
 				.newInstance();
@@ -32,7 +32,7 @@ public class XML2ACLParser {
 		Element instances = getFirstNamedElem(doc.getDocumentElement()
 				.getChildNodes(), "instances");
 
-		Map<Object, Object> ret = new HashMap<Object,Object>();
+		Map<Object, Object> ret = new HashMap<Object, Object>();
 
 		for (int i = 0; i < instances.getChildNodes().getLength(); i++) {
 			if (instances.getChildNodes().item(i).getNodeType() != Document.ELEMENT_NODE)
@@ -49,53 +49,48 @@ public class XML2ACLParser {
 						Element _attr = (Element) instance.getChildNodes()
 								.item(j);
 						if ("attr".equals(_attr.getNodeName())) {
-							String attr_name = _attr.getAttributes()
-									.getNamedItem("name").getTextContent();
-							String attr_val = _attr.getTextContent();
-							item.addAttribute(attr_name, attr_val);
+							if ("ref".equals(_attr.getAttributes()
+									.getNamedItem("type").getTextContent())) {
+								String attr_name = _attr.getAttributes()
+										.getNamedItem("name").getTextContent();
+								String attr_val = _attr.getTextContent();
+								item.addReference(attr_name, attr_val);
+							} else {
+								String attr_name = _attr.getAttributes()
+										.getNamedItem("name").getTextContent();
+								String attr_val = _attr.getTextContent();
+								item.addValue(attr_name, attr_val);
+							}
 						}
 					}
 				}
 				try {
 					Object obj = buildObject(item);
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
+					ret.put(item.getId(), obj);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				ret.put(item.getId(),item);
+				//ret.put(item.getId(), item);
 			}
 		}
 		return ret;
 	}
 
-	private static Object buildObject(ObjectEntity item) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, InstantiationException {
-		Class clazz  = Class.forName(item.getClazz());
-		Set<String> keys = item.getAttributes().keySet();
+	private static Object buildObject(ObjectEntity item)
+			throws ClassNotFoundException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException,
+			SecurityException, NoSuchMethodException, InstantiationException {
+		Class clazz = Class.forName(item.getClazz());
+		Set<String> keys = item.getValues().keySet();
+		Object idObject = parseToInstance(item.getId());
 		Method[] methods = clazz.getMethods();
-		Constructor constructor = clazz.getConstructor();
-		Object obj = constructor.newInstance();
-		for(String key:keys){
-			for(Method method:methods){
-				if(method.getName().toLowerCase().equals(("set"+key.toLowerCase()))){
-					String value = item.getAttributes().get(key);
+		Constructor constructor = clazz.getConstructors()[0];
+		Object obj = constructor.newInstance(idObject);
+		for (String key : keys) {
+			for (Method method : methods) {
+				if (method.getName().toLowerCase()
+						.equals(("set" + key.toLowerCase()))) {
+					String value = item.getValues().get(key);
 					Object valueObj = parseToInstance(value);
 					method.invoke(obj, valueObj);
 				}
@@ -108,17 +103,28 @@ public class XML2ACLParser {
 		try {
 			Double d = Double.valueOf(value);
 			if (d - Math.floor(d) == 0)
-				return d.intValue();
-			else return d;
+				return (int) d.intValue();
+			else
+				return d;
 		} catch (Exception e) {
-			return value;
+			return (String) value;
 		}
+	}
+	
+	private static Element getFirstNamedElem(NodeList lst, String name) {
+		for (int i = 0; i < lst.getLength(); i++) {
+			if (name.equals(lst.item(i).getNodeName())
+					&& lst.item(i).getNodeType() == Document.ELEMENT_NODE) {
+				return (Element) lst.item(i);
+			}
+		}
+		return null;
 	}
 
 	public static ArrayList<PermissionEntity> getPermissionsFromACLFile(
 			File aclFile) throws ParserConfigurationException, SAXException,
 			IOException {
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+		/*DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
 				.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		Document doc = docBuilder.parse(aclFile);
@@ -175,8 +181,8 @@ public class XML2ACLParser {
 					callerScope = PermissionEntity.Scope.INSTANCE;
 				}
 
-//				PermissionEntity item = new PermissionEntity(targetScope,
-//						callerScope, targetClass, callerClass, allMethods);
+				PermissionEntity item = new PermissionEntity(targetScope,
+						callerScope, targetClass, callerClass, allMethods);
 
 				if (!allMethods) {
 					NodeList methods = ((Element) permission
@@ -209,16 +215,7 @@ public class XML2ACLParser {
 				ret.add(item);
 			}
 		}
-		return ret;
-	}
-
-	private static Element getFirstNamedElem(NodeList lst, String name) {
-		for (int i = 0; i < lst.getLength(); i++) {
-			if (name.equals(lst.item(i).getNodeName())
-					&& lst.item(i).getNodeType() == Document.ELEMENT_NODE) {
-				return (Element) lst.item(i);
-			}
-		}
+		return ret;*/
 		return null;
 	}
 }

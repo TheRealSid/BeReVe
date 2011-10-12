@@ -1,9 +1,9 @@
 package main;
 
 import security.ObjectCreator;
-import security.Person;
 import security.SecureContext;
 import security.identity.IDObject.IDCheckResult;
+import world.Person;
 
 public class Main2 {
 	public static void main(String[] args) {
