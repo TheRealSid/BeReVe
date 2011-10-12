@@ -73,6 +73,10 @@ public class XML2ACLParser {
 				//ret.put(item.getId(), item);
 			}
 		}
+		Set<Object> ids = ret.keySet();
+		for (Object id : ids) {
+			System.out.println(ret.get(id));
+		}
 		return ret;
 	}
 
