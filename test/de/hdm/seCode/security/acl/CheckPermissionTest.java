@@ -8,15 +8,13 @@ import org.junit.Test;
 import de.hdm.seCode.example.world.Person;
 import de.hdm.seCode.example.world.SPerson;
 import de.hdm.seCode.example.world.Stadt;
-import de.hdm.seCode.security.SecurityCallback;
-import de.hdm.seCode.security.SecurityProxy;
-import de.hdm.seCode.security.acl.ACL;
-import de.hdm.seCode.security.acl.PermissionEntity;
+import de.hdm.seCode.security.SecureCallback;
+import de.hdm.seCode.security.SecureProxy;
 import de.hdm.seCode.security.acl.PermissionEntity.Scope;
 
 
 
-public class CheckPermissionTest extends SecurityCallback{
+public class CheckPermissionTest extends SecureCallback{
 
 	ACL acl;
 	Person bob;
@@ -36,9 +34,9 @@ public class CheckPermissionTest extends SecurityCallback{
 		 eve = new Person("eve");
 		 stadt = new Stadt();
 		 evilStadt = new Stadt();
-		 sBob = (SPerson) SecurityProxy.newInstance(bob, this, SPerson.class);
-		 sEve = (SPerson) SecurityProxy.newInstance(eve, alice, SPerson.class);
-		 sAlice = (SPerson) SecurityProxy.newInstance(alice, this, SPerson.class);
+		 sBob = (SPerson) SecureProxy.newInstance(bob, this, SPerson.class);
+		 sEve = (SPerson) SecureProxy.newInstance(eve, alice, SPerson.class);
+		 sAlice = (SPerson) SecureProxy.newInstance(alice, this, SPerson.class);
 	}
 	
 	@Test
