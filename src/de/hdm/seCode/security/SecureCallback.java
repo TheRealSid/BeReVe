@@ -1,17 +1,16 @@
 package de.hdm.seCode.security;
 import java.security.SecureRandom;
-import java.util.Random;
 
 import de.hdm.seCode.security.identity.IDObject;
 
 
 
-public abstract class SecurityCallback extends IDObject{
+public abstract class SecureCallback extends IDObject{
 
 	private Integer tan;
 	private SecureRandom rnd;
 	
-	public SecurityCallback(){
+	public SecureCallback(){
 		rnd = new SecureRandom();
 	}
 	protected Integer createTan(){

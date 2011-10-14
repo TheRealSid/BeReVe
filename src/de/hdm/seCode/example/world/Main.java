@@ -2,8 +2,8 @@ package de.hdm.seCode.example.world;
 import java.lang.reflect.InvocationTargetException;
 
 import de.hdm.seCode.example.world.bank.Bank;
-import de.hdm.seCode.security.SecurityCallback;
-import de.hdm.seCode.security.SecurityObjectException;
+import de.hdm.seCode.security.SecureCallback;
+import de.hdm.seCode.security.SecureObjectException;
 
 
 
@@ -13,7 +13,7 @@ import de.hdm.seCode.security.SecurityObjectException;
 
 
 
-public class Main extends SecurityCallback{
+public class Main extends SecureCallback{
 	private Object[] sput;
 
 	/**
@@ -25,7 +25,7 @@ public class Main extends SecurityCallback{
 	 * @throws IllegalArgumentException 
 	 * @throws NoSuchFieldException 
 	 */
-	public static void main(String[] args) throws SecurityObjectException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+	public static void main(String[] args) throws SecureObjectException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
 		Stadt stadt = new Stadt();
 		stadt.leben();
 	}

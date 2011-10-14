@@ -5,11 +5,11 @@ import java.util.Random;
 
 import de.hdm.seCode.example.world.SPerson;
 import de.hdm.seCode.example.world.bank.security.SKonto;
-import de.hdm.seCode.security.SecurityCallback;
-import de.hdm.seCode.security.SecurityProxy;
+import de.hdm.seCode.security.SecureCallback;
+import de.hdm.seCode.security.SecureProxy;
 
 
-public class Bank extends SecurityCallback {
+public class Bank extends SecureCallback {
 	// private SKonto konto;
 	private boolean confirm;
 	private Random rnd;
@@ -36,7 +36,7 @@ public class Bank extends SecurityCallback {
 	}
 
 	public void createKonto(SPerson person, int guthaben) {
-		konten.put(person, (SKonto) SecurityProxy.newInstance(new Konto(
+		konten.put(person, (SKonto) SecureProxy.newInstance(new Konto(
 				guthaben), this, SKonto.class));
 	}
 

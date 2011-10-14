@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdm.seCode.example.world.bank.Bank;
-import de.hdm.seCode.security.SecurityCallback;
-import de.hdm.seCode.security.SecurityProxy;
-import de.hdm.seCode.security.acl.ACL;
+import de.hdm.seCode.security.SecureCallback;
+import de.hdm.seCode.security.SecureProxy;
 
 
 
-public class Stadt extends SecurityCallback{
+public class Stadt extends SecureCallback{
 	private List<SPerson> personen = new ArrayList<SPerson>();
 	private Bank dieBank = new Bank();
 	public Stadt() {
-		SPerson bob = (SPerson) SecurityProxy.newInstance(new Person("Bob"), this, SPerson.class);
-		SPerson alice = (SPerson) SecurityProxy.newInstance(new Person("alice"), this, SPerson.class);
-		SPerson eve = (SPerson) SecurityProxy.newInstance(new Person("eve"), this, SPerson.class);
-		SPerson john = (SPerson) SecurityProxy.newInstance(new Person("John"), this, SPerson.class);
+		SPerson bob = (SPerson) SecureProxy.newInstance(new Person("Bob"), this, SPerson.class);
+		SPerson alice = (SPerson) SecureProxy.newInstance(new Person("alice"), this, SPerson.class);
+		SPerson eve = (SPerson) SecureProxy.newInstance(new Person("eve"), this, SPerson.class);
+		SPerson john = (SPerson) SecureProxy.newInstance(new Person("John"), this, SPerson.class);
 		personen.add(bob);
 		personen.add(alice);
 		personen.add(eve);

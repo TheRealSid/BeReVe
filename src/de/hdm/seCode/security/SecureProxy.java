@@ -9,12 +9,12 @@ import de.hdm.seCode.security.acl.ACL;
 import de.hdm.seCode.security.identity.IDObject;
 
 
-public class SecurityProxy implements InvocationHandler {
+public class SecureProxy implements InvocationHandler {
 
 	private final Object obj;
 	private final IDObject owner;
 
-	public SecurityProxy(Object obj, IDObject owner) {
+	public SecureProxy(Object obj, IDObject owner) {
 		this.obj = obj;
 		this.owner = owner;
 	}
@@ -27,7 +27,7 @@ public class SecurityProxy implements InvocationHandler {
 			return realMethod.invoke(obj);
 		}
 		
-		SecurityCallback caller = (SecurityCallback) aobj[aobj.length - 2];
+		SecureCallback caller = (SecureCallback) aobj[aobj.length - 2];
 		Integer tan = (Integer) aobj[aobj.length - 1];
 		Object[] args = Arrays.copyOfRange(aobj, 0, aobj.length - 2);
 		
@@ -47,18 +47,18 @@ public class SecurityProxy implements InvocationHandler {
 					types);
 			Integer callbackTan = caller.getTan();
 			if (callbackTan == null || !callbackTan.equals(tan))
-				throw new SecurityObjectException();
+				throw new SecureObjectException();
 			Object ret = realMethod.invoke(obj, args);
 			return ret;
 		}
 		 else
-			throw new SecurityObjectException();
+			throw new SecureObjectException();
 	}
 
 	static public Object newInstance(Object obj, IDObject owner,
 			Class... interfaces) {
 		return Proxy.newProxyInstance(obj.getClass().getClassLoader(),
-				interfaces, new SecurityProxy(obj, owner));
+				interfaces, new SecureProxy(obj, owner));
 	}
 
 }

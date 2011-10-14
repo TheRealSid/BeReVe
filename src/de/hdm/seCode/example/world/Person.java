@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdm.seCode.example.world.bank.security.SKonto;
-import de.hdm.seCode.security.SecurityCallback;
+import de.hdm.seCode.security.SecureCallback;
 
 
 
-public class Person extends SecurityCallback implements IPerson  {
+public class Person extends SecureCallback implements IPerson  {
 	private String name;
 	private SPerson partner;
 	private List<SPerson> freunde = new ArrayList<SPerson>();

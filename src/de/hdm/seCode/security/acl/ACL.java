@@ -13,11 +13,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import de.hdm.seCode.security.SecureCallback;
 import de.hdm.seCode.security.SecureInterface;
-import de.hdm.seCode.security.SecurityCallback;
 import de.hdm.seCode.security.acl.PermissionEntity.Scope;
 
-public class ACL extends SecurityCallback {
+public class ACL extends SecureCallback {
 
 	private Map<Object,Object> instanceList;
 	private ArrayList<PermissionEntity> permissionList = new ArrayList<PermissionEntity>();
@@ -110,7 +110,7 @@ public class ACL extends SecurityCallback {
 
 	}
 
-	public boolean addPermission(PermissionEntity entity, Integer tan, SecurityCallback caller) {
+	public boolean addPermission(PermissionEntity entity, Integer tan, SecureCallback caller) {
 		if(tan.equals(caller.getTan())){
 			for(SecureInterface target: entity.getTargetInstances()){
 				if(!target.isOwner(caller,this, createTan())){
