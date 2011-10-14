@@ -20,16 +20,16 @@
 	</instances>
 	<permissions>
 		<permission>
-			<target scope="class">Person</target>
+			<target scope="class">world.Person</target>
 			<methods>*</methods>
 			<caller scope="instance">
-				<class>Stadt</class>
+				<class>world.Stadt</class>
 				<instanceID>123456</instanceID>
 			</caller>
 		 </permission>
 		 <permission>
 			<target scope="instance">
-				<class>Person</class>
+				<class>world.Person</class>
 				<instanceID>mallory</instanceID>
 			</target>
 			<methods>
@@ -37,7 +37,7 @@
 				<method>getKonto</method>
 			</methods>
 			<caller scope="instance">
-				<class>Person</class>
+				<class>world.Person</class>
 				<instanceID>carol</instanceID>
 			</caller>
 		 </permission>
