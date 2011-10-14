@@ -207,7 +207,7 @@ public class XML2ACLParser {
 					for (int j = 0; j < instances.getLength(); j++) {
 						Set<Object> keySet = instanceList.keySet();
 						for(Object key : keySet) {
-							if(instances.item(j).getTextContent().equals(((ObjectEntity)instanceList.get(key)).getId())) {
+							if(instances.item(j).getTextContent().equals((String)key)) {
 								//SecurityProxy bla = SecurityProxy.newInstance(obj, owner, interfaces)
 							}
 						}
