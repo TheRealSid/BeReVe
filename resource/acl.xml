@@ -1,35 +1,35 @@
 <BeReVeACL>
 	<instances>
-		<object class="world.Person">
+		<object class="de.hdm.seCode.example.world.Person">
 			<id>mallory</id>
 			<attr name="name" type="val">Mallory</attr>
 			<attr name="partner" type="ref">carol</attr>
 			<!--<attr name="freunde" type="val"></attr>
 			<attr name="konto" type="val"></attr>-->
 		</object>
-		<object class="world.Person">
+		<object class="de.hdm.seCode.example.world.Person">
 			<id>carol</id>
 			<attr name="name" type="val">Carol</attr>
 			<attr name="partner" type="ref">mallory</attr>
 			<!--<attr name="freunde" type="val"></attr>
 			<attr name="konto" type="val"></attr>-->
 		</object>
-		<!--<object class="world.Stadt"  GlobalContext="true">
+		<!--<object class="de.hdm.seCode.example.world.Stadt"  GlobalContext="true">
 			<id>123456</id>
 		</object>-->
 	</instances>
 	<permissions>
 		<permission>
-			<target scope="class">world.Person</target>
+			<target scope="class">de.hdm.seCode.example.world.Person</target>
 			<methods>*</methods>
 			<caller scope="instance">
-				<class>world.Stadt</class>
+				<class>de.hdm.seCode.example.world.Stadt</class>
 				<instanceID>123456</instanceID>
 			</caller>
 		 </permission>
 		 <permission>
 			<target scope="instance">
-				<class>world.Person</class>
+				<class>de.hdm.seCode.example.world.Person</class>
 				<instanceID>mallory</instanceID>
 			</target>
 			<methods>
@@ -37,7 +37,7 @@
 				<method>getKonto</method>
 			</methods>
 			<caller scope="instance">
-				<class>world.Person</class>
+				<class>de.hdm.seCode.example.world.Person</class>
 				<instanceID>carol</instanceID>
 			</caller>
 		 </permission>
