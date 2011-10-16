@@ -19,6 +19,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import de.hdm.seCode.security.SecureProxy;
+
 public class XML2ACLParser {
 	public static Map<Object, Object> getInstancesFromACLFile(File aclFile)
 			throws ParserConfigurationException, SAXException, IOException {
@@ -33,6 +35,8 @@ public class XML2ACLParser {
 				.getChildNodes(), "instances");
 
 		Map<Object, Object> ret = new HashMap<Object, Object>();
+		Map<Object, Object> refs = new HashMap<Object, Object>();
+		
 
 		for (int i = 0; i < instances.getChildNodes().getLength(); i++) {
 			if (instances.getChildNodes().item(i).getNodeType() != Document.ELEMENT_NODE)
@@ -67,17 +71,39 @@ public class XML2ACLParser {
 				try {
 					Object obj = buildObject(item);
 					ret.put(item.getId(), obj);
+					refs.put(item.getId(), item.getReferences());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				// ret.put(item.getId(), item);
 			}
 		}
-		Set<Object> ids = ret.keySet();
-		for (Object id : ids) {
-			System.out.println(ret.get(id));
-		}
+		addReferences(ret, refs);
 		return ret;
+	}
+	
+	private static void addReferences(Map<Object, Object> objects, Map<Object, Object> refs) {
+		Set<Object> refIds = refs.keySet();
+		for(Object refId : refIds) {
+			Map<String, String> refStrings = (Map<String, String>) refs.get(refId);
+			Set<String> refStringsKeys = refStrings.keySet();
+			for(String refStringKey : refStringsKeys) {
+				Object theObj = objects.get(refId);
+				String varName = refStringKey;
+				String refObjId = refStrings.get(refStringKey);
+				Object refObj;
+				for(Object _refId : refIds) {
+					//if(objects.get(_refId))
+				}
+				System.out.println(theObj + varName + refObjId);
+				Method[] methods = theObj.getClass().getMethods();
+				for (Method method : methods) {
+					if (method.getName().toLowerCase().equals(("set" + varName.toLowerCase()))) {
+						//method.invoke(obj, valueObj);
+					}
+				}
+			}
+		}
 	}
 
 	private static Object buildObject(ObjectEntity item)
@@ -208,7 +234,7 @@ public class XML2ACLParser {
 						Set<Object> keySet = instanceList.keySet();
 						for(Object key : keySet) {
 							if(instances.item(j).getTextContent().equals((String)key)) {
-								//SecurityProxy bla = SecurityProxy.newInstance(obj, owner, interfaces)
+								//TODO: create and add SecureInterface for targetInstance instanceList.get(key)
 							}
 						}
 						//item.addTargetInstanceID(instances.item(j).getTextContent());
@@ -220,7 +246,12 @@ public class XML2ACLParser {
 							.getElementsByTagName("caller").item(0))
 							.getElementsByTagName("instanceID");
 					for (int j = 0; j < instances.getLength(); j++) {
-						//item.addCallerInstanceID((instances.item(j).getTextContent()));
+						Set<Object> keySet = instanceList.keySet();
+						for(Object key : keySet) {
+							if(instances.item(j).getTextContent().equals((String)key)) {
+								item.addCaller(instanceList.get(key));
+							}
+						}
 					}
 				}
 				ret.add(item);
