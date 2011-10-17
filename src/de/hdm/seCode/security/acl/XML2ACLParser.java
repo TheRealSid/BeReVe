@@ -19,6 +19,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import de.hdm.seCode.example.world.SPerson;
+import de.hdm.seCode.security.SecureInterface;
 import de.hdm.seCode.security.SecureProxy;
 import de.hdm.seCode.security.identity.IDObject;
 
@@ -117,14 +119,10 @@ public class XML2ACLParser {
 								Object objOwner = getObjectOwner(raw_objs_key, data);
 								String clazzName = obj.getClass().getName();
 								String interfaceName = class2interface(clazzName);
+								String secName = class2interface(clazzName);
 								Class interfaceClazz = Class.forName(interfaceName);
 								Object SObj = SecureProxy.newInstance(obj, (IDObject) objOwner, new Class[]{interfaceClazz});
-								System.out.println(refOwner.getClass().getName());
-								System.out.println(refOwner);
-								System.out.println(refOwnerMethod.getName());
-								System.out.println(SObj.getClass().getName());
-								System.out.println(SObj);
-								//refOwnerMethod.invoke(refOwner, SObj);
+								refOwnerMethod.invoke(refOwner, SObj);
 							}
 						}
 					}
@@ -146,7 +144,7 @@ public class XML2ACLParser {
 	
 	private static String class2interface(String className) {
 		String[] tokens = className.split("\\.");
-		tokens[tokens.length-1] = "I" + tokens[tokens.length-1];
+		tokens[tokens.length-1] = "S" + tokens[tokens.length-1];
 		String ret = "";
 		for (String token : tokens) {
 			ret += token + ".";
@@ -283,7 +281,6 @@ public class XML2ACLParser {
 						for(Object key : keySet) {
 							if(instances.item(j).getTextContent().equals((String)key)) {
 								//TODO: create and add SecureInterface for targetInstance instanceList.get(key)
-								//Class targetInterface = Class.forName("S"+targetClassString);
 							}
 						}
 						//item.addTargetInstanceID(instances.item(j).getTextContent());
