@@ -1,24 +1,28 @@
 <BeReVeACL>
 	<instances>
+	
 		<object class="de.hdm.seCode.example.world.Person">
 			<id>mallory</id>
+			<owner>stuttgart</owner>
 			<attr name="name" type="val">Mallory</attr>
 			<attr name="partner" type="ref">carol</attr>
-			<!--<attr name="freunde" type="val"></attr>
-			<attr name="konto" type="val"></attr>-->
 		</object>
+		
 		<object class="de.hdm.seCode.example.world.Person">
+			<owner>stuttgart</owner>
 			<id>carol</id>
 			<attr name="name" type="val">Carol</attr>
 			<attr name="partner" type="ref">mallory</attr>
-			<!--<attr name="freunde" type="val"></attr>
-			<attr name="konto" type="val"></attr>-->
 		</object>
-		<!--<object class="de.hdm.seCode.example.world.Stadt"  GlobalContext="true">
-			<id>123456</id>
-		</object>-->
+		
+		<object class="de.hdm.seCode.example.world.Stadt">
+			<owner></owner>
+			<id>stuttgart</id>
+		</object>
+		
 	</instances>
 	<permissions>
+		
 		<permission>
 			<target scope="class">de.hdm.seCode.example.world.Person</target>
 			<methods>*</methods>
@@ -27,6 +31,7 @@
 				<instanceID>123456</instanceID>
 			</caller>
 		 </permission>
+		 
 		 <permission>
 			<target scope="instance">
 				<class>de.hdm.seCode.example.world.Person</class>
@@ -41,5 +46,6 @@
 				<instanceID>carol</instanceID>
 			</caller>
 		 </permission>
+		 
 	 </permissions>
 </BeReVeACL>

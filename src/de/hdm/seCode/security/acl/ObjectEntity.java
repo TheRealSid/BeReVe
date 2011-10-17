@@ -5,12 +5,14 @@ import java.util.HashMap;
 public class ObjectEntity {
 	private String clazz;
 	private String id;
+	private String owner;
 	private HashMap<String, String> values;
 	private HashMap<String, String> references;
 	
-	public ObjectEntity(String clazz, String id) {
+	public ObjectEntity(String clazz, String id, String owner) {
 		this.clazz = clazz;
 		this.id = id;
+		this.owner = owner;
 		values = new HashMap<String, String>();
 		references = new HashMap<String, String>();
 	}
@@ -29,6 +31,10 @@ public class ObjectEntity {
 
 	public String getId() {
 		return id;
+	}
+	
+	public String getOwner() {
+		return owner;
 	}
 
 	public HashMap<String, String> getValues() {

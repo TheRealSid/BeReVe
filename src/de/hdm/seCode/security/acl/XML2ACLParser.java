@@ -20,6 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import de.hdm.seCode.security.SecureProxy;
+import de.hdm.seCode.security.identity.IDObject;
 
 public class XML2ACLParser {
 	public static Map<Object, Object> getInstancesFromACLFile(File aclFile)
@@ -34,8 +35,12 @@ public class XML2ACLParser {
 		Element instances = getFirstNamedElem(doc.getDocumentElement()
 				.getChildNodes(), "instances");
 
-		Map<Object, Object> ret = new HashMap<Object, Object>();
+		Map<Object, Object> ret_objects = new HashMap<Object, Object>();
 		Map<Object, Object> refs = new HashMap<Object, Object>();
+		Map<Object, String> owners = new HashMap<Object, String>();
+		Map<Object, ObjectEntity> raw_obj = new HashMap<Object, ObjectEntity>();
+		
+		Map<String, Object> data = new HashMap<String, Object>();
 		
 
 		for (int i = 0; i < instances.getChildNodes().getLength(); i++) {
@@ -47,7 +52,9 @@ public class XML2ACLParser {
 						.getTextContent();
 				String id = getFirstNamedElem(instance.getChildNodes(), "id")
 						.getTextContent();
-				ObjectEntity item = new ObjectEntity(clazz, id);
+				String owner = getFirstNamedElem(instance.getChildNodes(), "owner")
+						.getTextContent();
+				ObjectEntity item = new ObjectEntity(clazz, id, owner);
 				for (int j = 0; j < instance.getChildNodes().getLength(); j++) {
 					if (instance.getChildNodes().item(j).getNodeType() == Document.ELEMENT_NODE) {
 						Element _attr = (Element) instance.getChildNodes()
@@ -70,40 +77,81 @@ public class XML2ACLParser {
 				}
 				try {
 					Object obj = buildObject(item);
-					ret.put(item.getId(), obj);
+					ret_objects.put(item.getId(), obj);
 					refs.put(item.getId(), item.getReferences());
+					owners.put(item.getId(), item.getOwner());
+					raw_obj.put(item.getId(), item);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				// ret.put(item.getId(), item);
 			}
 		}
-		addReferences(ret, refs);
-		return ret;
+		data.put("objects", ret_objects);
+		data.put("refs", refs);
+		data.put("owners", owners);
+		data.put("raw_objects", raw_obj);
+		try {
+			addReferences(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret_objects;
 	}
 	
-	private static void addReferences(Map<Object, Object> objects, Map<Object, Object> refs) {
-		Set<Object> refIds = refs.keySet();
-		for(Object refId : refIds) {
-			Map<String, String> refStrings = (Map<String, String>) refs.get(refId);
-			Set<String> refStringsKeys = refStrings.keySet();
-			for(String refStringKey : refStringsKeys) {
-				Object theObj = objects.get(refId);
-				String varName = refStringKey;
-				String refObjId = refStrings.get(refStringKey);
-				Object refObj;
-				for(Object _refId : refIds) {
-					//if(objects.get(_refId))
-				}
-				System.out.println(theObj + varName + refObjId);
-				Method[] methods = theObj.getClass().getMethods();
-				for (Method method : methods) {
-					if (method.getName().toLowerCase().equals(("set" + varName.toLowerCase()))) {
-						//method.invoke(obj, valueObj);
+	private static void addReferences(Map<String, Object> data) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		Set<Object> ref_keys = ((Map<Object, Object>) data.get("refs")).keySet();
+		for (Object ref_key : ref_keys) {
+			Object refOwner = ((Map<Object, Object>)data.get("objects")).get(ref_key);
+			Map<String, String> thisRefs = (Map<String, String>) ((Map<Object, Object>) data.get("refs")).get(ref_key);
+			Set<String> thisRefsKeys = thisRefs.keySet();
+			for (String thisRefKey : thisRefsKeys) {
+				Map<Object, ObjectEntity> raw_objs = (Map<Object, ObjectEntity>) data.get("raw_objects");
+				Set<Object> raw_objs_keys = raw_objs.keySet();
+				for (Object raw_objs_key : raw_objs_keys) {
+					if(((ObjectEntity) raw_objs.get(raw_objs_key)).getId().equals(thisRefs.get(thisRefKey))) {
+						Class refOwnerclazz = Class.forName(((ObjectEntity) raw_objs.get(raw_objs_key)).getClazz());
+						Method[] refOwnerMethods = refOwnerclazz.getMethods();
+						for (Method refOwnerMethod : refOwnerMethods) {
+							if (refOwnerMethod.getName().toLowerCase().equals(("set" + thisRefKey.toLowerCase()))) {
+								Object obj = ((Map<Object, Object>)data.get("objects")).get(raw_objs_key);
+								Object objOwner = getObjectOwner(raw_objs_key, data);
+								String clazzName = obj.getClass().getName();
+								String interfaceName = class2interface(clazzName);
+								Class interfaceClazz = Class.forName(interfaceName);
+								Object SObj = SecureProxy.newInstance(obj, (IDObject) objOwner, new Class[]{interfaceClazz});
+								System.out.println(refOwner.getClass().getName());
+								System.out.println(refOwner);
+								System.out.println(refOwnerMethod.getName());
+								System.out.println(SObj.getClass().getName());
+								System.out.println(SObj);
+								//refOwnerMethod.invoke(refOwner, SObj);
+							}
+						}
 					}
 				}
 			}
 		}
+	}
+	
+	private static Object getObjectOwner(Object objKey, Map<String, Object> data) {
+		Map<Object, String> owners = (Map<Object, String>) data.get("owners");
+		Set<Object> owners_keys = owners.keySet();
+		for (Object owner_key : owners_keys) {
+			if(owner_key.equals(objKey)) {
+				return ((Map<Object, Object>)data.get("objects")).get(owners.get(owner_key));
+			}
+		}
+		return null;
+	}
+	
+	private static String class2interface(String className) {
+		String[] tokens = className.split("\\.");
+		tokens[tokens.length-1] = "I" + tokens[tokens.length-1];
+		String ret = "";
+		for (String token : tokens) {
+			ret += token + ".";
+		}
+		return ret.substring(0, ret.length()-1);
 	}
 
 	private static Object buildObject(ObjectEntity item)
@@ -235,6 +283,7 @@ public class XML2ACLParser {
 						for(Object key : keySet) {
 							if(instances.item(j).getTextContent().equals((String)key)) {
 								//TODO: create and add SecureInterface for targetInstance instanceList.get(key)
+								//Class targetInterface = Class.forName("S"+targetClassString);
 							}
 						}
 						//item.addTargetInstanceID(instances.item(j).getTextContent());

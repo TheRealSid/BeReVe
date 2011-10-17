@@ -12,7 +12,9 @@ import de.hdm.seCode.security.SecureProxy;
 public class Stadt extends SecureCallback{
 	private List<SPerson> personen = new ArrayList<SPerson>();
 	private Bank dieBank = new Bank();
-	public Stadt() {
+	private Object id;
+	public Stadt(Object id) {
+		this.id = id;
 		SPerson bob = (SPerson) SecureProxy.newInstance(new Person("Bob"), this, SPerson.class);
 		SPerson alice = (SPerson) SecureProxy.newInstance(new Person("alice"), this, SPerson.class);
 		SPerson eve = (SPerson) SecureProxy.newInstance(new Person("eve"), this, SPerson.class);
@@ -49,4 +51,5 @@ public class Stadt extends SecureCallback{
 			person.leben(this,createTan());
 		}
 	}
+
 }

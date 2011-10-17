@@ -26,7 +26,7 @@ public class Main extends SecureCallback{
 	 * @throws NoSuchFieldException 
 	 */
 	public static void main(String[] args) throws SecureObjectException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
-		Stadt stadt = new Stadt();
+		Stadt stadt = new Stadt("stuttgart");
 		stadt.leben();
 	}
 	
