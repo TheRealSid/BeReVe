@@ -16,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -38,6 +39,7 @@ public class XML2ACLParser {
 				.getChildNodes(), "instances");
 
 		Map<Object, Object> ret_objects = new HashMap<Object, Object>();
+		Map<Object, Object> global_objects = new HashMap<Object, Object>();
 		Map<Object, Object> refs = new HashMap<Object, Object>();
 		Map<Object, String> owners = new HashMap<Object, String>();
 		Map<Object, ObjectEntity> raw_obj = new HashMap<Object, ObjectEntity>();
@@ -50,8 +52,16 @@ public class XML2ACLParser {
 				continue;
 			Element instance = (Element) instances.getChildNodes().item(i);
 			if ("object".equals(instance.getNodeName())) {
+				boolean objIsGlobalContext = false;
 				String clazz = instance.getAttributes().getNamedItem("class")
 						.getTextContent();
+				Node globalContext = instance.getAttributes().getNamedItem("globalContext");
+				if(globalContext != null) {
+					String globalContextVal = globalContext.getTextContent();
+					if ("true".equals(globalContextVal)) {
+						objIsGlobalContext = true;
+					}
+				}
 				String id = getFirstNamedElem(instance.getChildNodes(), "id")
 						.getTextContent();
 				String owner = getFirstNamedElem(instance.getChildNodes(), "owner")
@@ -79,6 +89,9 @@ public class XML2ACLParser {
 				}
 				try {
 					Object obj = buildObject(item);
+					if (objIsGlobalContext) {
+						global_objects.put(item.getId(), obj);
+					}
 					ret_objects.put(item.getId(), obj);
 					refs.put(item.getId(), item.getReferences());
 					owners.put(item.getId(), item.getOwner());
@@ -89,6 +102,7 @@ public class XML2ACLParser {
 			}
 		}
 		data.put("objects", ret_objects);
+		data.put("global_objects", global_objects);
 		data.put("refs", refs);
 		data.put("owners", owners);
 		data.put("raw_objects", raw_obj);

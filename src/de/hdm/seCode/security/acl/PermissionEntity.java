@@ -1,6 +1,5 @@
 package de.hdm.seCode.security.acl;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ public class PermissionEntity {
 	private boolean allMethods;
 	private List<SecureInterface> targetInstances;
 	private List<Object> callerInstances;
-	private boolean isGlobalContext;
 	
 	public PermissionEntity(Scope targetScope, Scope callerScope,
 			Class<?> targetClass, Class<?> callerClass, boolean allMethods, List<String> methods, List<SecureInterface> targets, List<Object> caller) {
@@ -87,13 +85,5 @@ public class PermissionEntity {
 
 	public List<Object> getCallerInstances() {
 		return callerInstances;
-	}
-	
-	public void setGlobalContext(boolean isGlobalContext) {
-		this.isGlobalContext = isGlobalContext;
-	}
-	
-	public boolean isGlobalContext() {
-		return isGlobalContext;
 	}
 }

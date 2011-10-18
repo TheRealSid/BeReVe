@@ -15,7 +15,7 @@
 			<attr name="partner" type="ref">mallory</attr>
 		</object>
 		
-		<object class="de.hdm.seCode.example.world.Stadt">
+		<object class="de.hdm.seCode.example.world.Stadt" globalContext="true">
 			<owner></owner>
 			<id>stuttgart</id>
 		</object>
