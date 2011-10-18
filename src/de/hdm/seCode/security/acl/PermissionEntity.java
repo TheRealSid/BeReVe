@@ -1,5 +1,6 @@
 package de.hdm.seCode.security.acl;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +43,8 @@ public class PermissionEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PermissionEntity addMethod(String methodName) {
-		methods.add(methodName);
+	public PermissionEntity addMethod(String method) {
+		methods.add(method);
 		return this;
 	}
 	public PermissionEntity addTarget(SecureInterface target) {

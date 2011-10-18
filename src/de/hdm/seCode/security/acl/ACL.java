@@ -34,9 +34,10 @@ public class ACL extends SecureCallback {
 	}
 
 	public void parseACLFile() throws ParserConfigurationException, SAXException, IOException {
-		instanceList = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml"));
+		Map<String, Object> data = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml")); 
+		instanceList = (Map<Object, Object>) data.get("objects");
 		try {
-			permissionList = XML2ACLParser.getPermissionsFromACLFile(new File("resource/acl.xml"), instanceList);
+			permissionList = XML2ACLParser.getPermissionsFromACLFile(new File("resource/acl.xml"), data);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

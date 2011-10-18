@@ -25,7 +25,7 @@ import de.hdm.seCode.security.SecureProxy;
 import de.hdm.seCode.security.identity.IDObject;
 
 public class XML2ACLParser {
-	public static Map<Object, Object> getInstancesFromACLFile(File aclFile)
+	public static Map<String, Object> getInstancesFromACLFile(File aclFile)
 			throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
 				.newInstance();
@@ -97,7 +97,7 @@ public class XML2ACLParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ret_objects;
+		return data;
 	}
 	
 	private static void addReferences(Map<String, Object> data) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -198,8 +198,10 @@ public class XML2ACLParser {
 	}
 
 	public static ArrayList<PermissionEntity> getPermissionsFromACLFile(
-			File aclFile, Map<Object,Object> instanceList) throws ParserConfigurationException, SAXException,
+			File aclFile, Map<String,Object> data) throws ParserConfigurationException, SAXException,
 			IOException, ClassNotFoundException {
+		Map<Object, Object> instanceList = (Map<Object, Object>) data.get("objects");
+		
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
 				.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -268,6 +270,13 @@ public class XML2ACLParser {
 							.getElementsByTagName("methods").item(0))
 							.getElementsByTagName("method");
 					for (int j = 0; j < methods.getLength(); j++) {
+						Method[] realMethods = targetClass.getMethods();
+						for (Method realMethod : realMethods) {
+							if (methods.item(j).getTextContent().toLowerCase().equals(realMethod.getName().toLowerCase())) {
+								//item.addMethod(realMethod);
+								break;
+							}
+						}
 						item.addMethod(methods.item(j).getTextContent());
 					}
 				}
@@ -280,7 +289,23 @@ public class XML2ACLParser {
 						Set<Object> keySet = instanceList.keySet();
 						for(Object key : keySet) {
 							if(instances.item(j).getTextContent().equals((String)key)) {
-								//TODO: create and add SecureInterface for targetInstance instanceList.get(key)
+								Map<Object, ObjectEntity> raw_objs = (Map<Object, ObjectEntity>) data.get("raw_objects");
+								Set<Object> raw_objs_keys = raw_objs.keySet();
+								Object target_raw_key = null;
+								for (Object raw_objs_key : raw_objs_keys) {
+									if(raw_objs_key.equals(key)) {
+										target_raw_key = raw_objs_key;
+									}
+								}
+								Object obj = instanceList.get(key);
+								if(target_raw_key != null) {
+									Object owner = getObjectOwner(target_raw_key, data);
+									String clazzName = obj.getClass().getName();
+									String interfaceName = class2interface(clazzName);
+									Class interfaceClazz = Class.forName(interfaceName);
+									SecureInterface SObj = (SecureInterface) SecureProxy.newInstance(obj, (IDObject) owner, new Class[]{interfaceClazz});
+									item.addTarget(SObj);
+								}
 							}
 						}
 						//item.addTargetInstanceID(instances.item(j).getTextContent());

@@ -29,24 +29,24 @@ public class Main2 {
 		
 		C.setId(A.getId());
 		
-		System.out.println(A);
-		System.out.println(B);
-		System.out.println(C);
-		
-		if(SecureContext.checkId(A) == IDCheckResult.OK)
-			System.out.println("A ist A");
-		else
-			System.out.println("A ist nicht A");
-		
-		if(SecureContext.checkId(C) == IDCheckResult.OK)
-			System.out.println("C ist A");
-		else
-			System.out.println("C ist nicht A");
-		
-		
-		SecureContext.removeObject(A);
-		
-		if(SecureContext.checkId(A) == IDCheckResult.REMOVED)
-			System.out.println("A ist nicht mehr...");
+//		System.out.println(A);
+//		System.out.println(B);
+//		System.out.println(C);
+//		
+//		if(SecureContext.checkId(A) == IDCheckResult.OK)
+//			System.out.println("A ist A");
+//		else
+//			System.out.println("A ist nicht A");
+//		
+//		if(SecureContext.checkId(C) == IDCheckResult.OK)
+//			System.out.println("C ist A");
+//		else
+//			System.out.println("C ist nicht A");
+//		
+//		
+//		SecureContext.removeObject(A);
+//		
+//		if(SecureContext.checkId(A) == IDCheckResult.REMOVED)
+//			System.out.println("A ist nicht mehr...");
 	}
 }
