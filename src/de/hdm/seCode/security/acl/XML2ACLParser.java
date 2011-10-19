@@ -106,12 +106,24 @@ public class XML2ACLParser {
 		data.put("refs", refs);
 		data.put("owners", owners);
 		data.put("raw_objects", raw_obj);
+		data.put("owner_objects", new HashMap<Object, Object>());
 		try {
 			addReferences(data);
+			setOwners(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return data;
+	}
+	
+	private static void setOwners(Map<String, Object> data) {
+		Map<Object, String> ownerMap = (Map<Object, String>) data.get("owners");
+		Map<Object, Object> ownerObj = (Map<Object, Object>) data.get("owner_objects");
+		Set<Object> owner_keys = ownerMap.keySet();
+		for (Object owner_key : owner_keys) {
+			Object owner = ((Map<Object, Object>) data.get("objects")).get(ownerMap.get(owner_key));
+			ownerObj.put(owner_key, owner);
+		}
 	}
 	
 	private static void addReferences(Map<String, Object> data) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -156,7 +168,7 @@ public class XML2ACLParser {
 		return null;
 	}
 	
-	private static String class2interface(String className) {
+	public static String class2interface(String className) {
 		String[] tokens = className.split("\\.");
 		tokens[tokens.length-1] = "S" + tokens[tokens.length-1];
 		String ret = "";

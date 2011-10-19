@@ -1,33 +1,42 @@
 package de.hdm.seCode.example.world;
 
-import de.hdm.seCode.security.ObjectCreator;
 import de.hdm.seCode.security.SecureContext;
-import de.hdm.seCode.security.identity.IDObject.IDCheckResult;
+import de.hdm.seCode.security.SecureProxy;
+
 
 public class Main2 {
 	public static void main(String[] args) {
-		Person A = (Person) SecureContext.createObject(new ObjectCreator<Person>() {
-			@Override
-			public Person createObject() {
-				return new Person("Person A");
-			}
-		});
-		Person B = (Person) SecureContext.createObject(new ObjectCreator<Person>() {
-			@Override
-			public Person createObject() {
-				return new Person("Person B");
-			}
-		});
 		
-		Person C = (Person) SecureContext.createObject(new ObjectCreator<Person>() {
-			@Override
-			public Person createObject() {
-				return new Person("Person C");
-			}
-		});
+		Stadt stuttgart = (Stadt) SecureContext.getGlobalContext("stuttgart");
 		
+		SPerson mallory = (SPerson) SecureContext.getSecureObject("mallory");
 		
-		C.setId(A.getId());
+		if(mallory != null) {
+			System.out.println(mallory);
+		}
+		
+//		Person A = (Person) SecureContext.createObject(new ObjectCreator<Person>() {
+//			@Override
+//			public Person createObject() {
+//				return new Person("Person A");
+//			}
+//		});
+//		Person B = (Person) SecureContext.createObject(new ObjectCreator<Person>() {
+//			@Override
+//			public Person createObject() {
+//				return new Person("Person B");
+//			}
+//		});
+//		
+//		Person C = (Person) SecureContext.createObject(new ObjectCreator<Person>() {
+//			@Override
+//			public Person createObject() {
+//				return new Person("Person C");
+//			}
+//		});
+//		
+//		
+//		C.setId(A.getId());
 		
 //		System.out.println(A);
 //		System.out.println(B);

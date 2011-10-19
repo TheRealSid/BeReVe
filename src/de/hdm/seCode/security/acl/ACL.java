@@ -20,8 +20,10 @@ import de.hdm.seCode.security.acl.PermissionEntity.Scope;
 public class ACL extends SecureCallback {
 
 	private Map<Object,Object> instanceList;
+	private Map<Object, Object> globalObjectsList;
 	private ArrayList<PermissionEntity> permissionList = new ArrayList<PermissionEntity>();
-
+	private Map<Object,Object> ownerList;
+	
 	private static ACL acl;
 	private ACL() {
 
@@ -32,10 +34,28 @@ public class ACL extends SecureCallback {
 		}
 		return acl;
 	}
+	
+	
 
+	public Map<Object, Object> getInstanceList() {
+		return instanceList;
+	}
+	public Map<Object, Object> getGlobalObjectsList() {
+		return globalObjectsList;
+	}
+	public ArrayList<PermissionEntity> getPermissionList() {
+		return permissionList;
+	}
+	
+	public Object getOwner(Object o) {
+		return ownerList.get(o);
+	}
+	
 	public void parseACLFile() throws ParserConfigurationException, SAXException, IOException {
 		Map<String, Object> data = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml")); 
 		instanceList = (Map<Object, Object>) data.get("objects");
+		globalObjectsList = (Map<Object, Object>) data.get("global_objects");
+		ownerList = (Map<Object, Object>) data.get("owner_objects");
 		try {
 			permissionList = XML2ACLParser.getPermissionsFromACLFile(new File("resource/acl.xml"), data);
 		} catch (ClassNotFoundException e) {
