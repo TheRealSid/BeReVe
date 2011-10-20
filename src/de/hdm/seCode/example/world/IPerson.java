@@ -11,5 +11,5 @@ public interface IPerson {
 	public Person setKonto(SKonto konto) ;
 	public Person addFreund(SPerson person);
 	public void doSex();
-	public void leben();
+	public void go();
 }

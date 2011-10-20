@@ -47,18 +47,8 @@ public class Person extends SecureCallback implements IPerson  {
 	  return this;
 	}
 	@Override
-	public void leben() {
-		System.out.println(name+" lebt");
-		if(partner != null)
-			partner.doSex(this,createTan());
-		if(freunde.size()>0){
-			try{
-		    	freunde.get(0).doSex(this,createTan());
-			}catch(Exception e){
-				System.out.println("Can't do sex with: "+ freunde.get(0));
-			}
-		}
-		
+	public void go() {
+		partner.doSex(this,createTan());
 	}
 	@Override
 	public String toString() {
@@ -69,4 +59,44 @@ public class Person extends SecureCallback implements IPerson  {
 		System.out.println(name+ ": OHHH YEAH!");
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		return prime;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (freunde == null) {
+			if (other.freunde != null)
+				return false;
+		} else if (!freunde.equals(other.freunde))
+			return false;
+		if (konto == null) {
+			if (other.konto != null)
+				return false;
+		} else if (!konto.equals(other.konto))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (partner == null) {
+			if (other.partner != null)
+				return false;
+		} else if (!partner.equals(other.partner))
+			return false;
+		return true;
+	}
+
+	
 }

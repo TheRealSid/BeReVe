@@ -4,15 +4,41 @@ package de.hdm.seCode.security.identity;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import de.hdm.seCode.security.SecureProxy;
+import de.hdm.seCode.security.acl.ACL;
+import de.hdm.seCode.security.acl.XML2ACLParser;
 import de.hdm.seCode.security.identity.IDObject.IDCheckResult;
 
-import sun.reflect.Reflection;
 
 public class IdentityManager {
 	private IdentityHashMap<UUID, Object> idBase;
-	
-	public IdentityManager() {
+	private static IdentityManager im = null;
+	private static ACL acl;
+	public static IdentityManager getInstance(){
+		if(im == null)
+			im = new IdentityManager();
+		return im;
+	}
+	private IdentityManager() {
 		idBase = new IdentityHashMap<UUID, Object>();
+		acl = ACL.getInstance();
+	}
+	
+	public static Object getGlobalContext(Object id) {
+		return acl.getGlobalObjectsList().get(id);
+	}
+	
+	public static Object getSecureObject(Object id) {
+		Object o = acl.getInstanceList().get(id);
+		Class i;
+		Object so = null;
+		try {
+			i = Class.forName(XML2ACLParser.class2interface(o.getClass().getName()));
+			so = SecureProxy.newInstance(o, (IDObject) acl.getOwner(id), i);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return so;
 	}
 	
 	public UUID addObject(Object o) {

@@ -14,7 +14,7 @@ public interface SPerson extends SecureInterface{
 	public Person setKonto(SKonto konto, SecureCallback callback, Integer tan);
 	public Person addFreund(SPerson person, SecureCallback callback,
 			Integer tan);
-	public void leben(SecureCallback callback,
+	public void go(SecureCallback callback,
 			Integer tan);
 	public void doSex(SecureCallback callback, Integer tan);
 	

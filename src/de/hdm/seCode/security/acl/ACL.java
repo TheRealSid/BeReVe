@@ -18,7 +18,7 @@ import de.hdm.seCode.security.SecureInterface;
 import de.hdm.seCode.security.acl.PermissionEntity.Scope;
 
 public class ACL extends SecureCallback {
-
+	//TODO !!!!! Map<Object,SecureInterface> !!!!
 	private Map<Object,Object> instanceList;
 	private Map<Object, Object> globalObjectsList;
 	private ArrayList<PermissionEntity> permissionList = new ArrayList<PermissionEntity>();
@@ -31,6 +31,15 @@ public class ACL extends SecureCallback {
 	public static ACL getInstance() {
 		if (acl == null) {
 			acl = new ACL();
+			try {
+				acl.parseACLFile();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return acl;
 	}
@@ -121,6 +130,7 @@ public class ACL extends SecureCallback {
 		for(PermissionEntity entity:permissions){
 			if(entity.getCallerScope() == Scope.INSTANCE){
 				if(entity.getCallerInstances().contains(caller)) return true;
+				else if (checkProxyContains(entity.getCallerInstances(),caller)) return true;
 			}
 			else if(entity.getCallerScope() == Scope.CLASS){
 				if(entity.getCallerClass().equals(caller.getClass())) return true;
@@ -131,6 +141,15 @@ public class ACL extends SecureCallback {
 
 	}
 
+	private boolean checkProxyContains(List<Object> callerInstances,
+			Object caller) {
+		for(Object instance: callerInstances){
+			if(instance instanceof SecureInterface){
+				if(((SecureInterface)instance).getObject(this, createTan()).equals(caller)) return true;
+			}
+		}
+		return false;
+	}
 	public boolean addPermission(PermissionEntity entity, Integer tan, SecureCallback caller) {
 		if(tan.equals(caller.getTan())){
 			for(SecureInterface target: entity.getTargetInstances()){
