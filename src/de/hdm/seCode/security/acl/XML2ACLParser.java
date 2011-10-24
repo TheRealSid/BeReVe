@@ -110,10 +110,33 @@ public class XML2ACLParser {
 		try {
 			addReferences(data);
 			setOwners(data);
+			data.put("secureInterfaces", createSecureInterfacesFromData(data));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return data;
+	}
+	
+	private static HashMap<Object, SecureInterface> createSecureInterfacesFromData(Map<String, Object> data) {
+		HashMap<Object, SecureInterface> ret = new HashMap<Object, SecureInterface>();
+		HashMap<Object, Object> objects = (HashMap<Object, Object>) data.get("objects");
+		Map<Object, Object> ownerObj = (Map<Object, Object>) data.get("owner_objects");
+		Set<Object> objKeys = objects.keySet();
+		for (Object objKey : objKeys) {
+			Object owner = ownerObj.get(objKey);
+			Object obj = objects.get(objKey);
+			String className = obj.getClass().getName();
+			SecureInterface secObj = null;
+			Class interfaceClass;
+			try {
+				interfaceClass = Class.forName(class2interface(className));
+				secObj = (SecureInterface) SecureProxy.newInstance(obj, (IDObject) owner, new Class[]{interfaceClass});
+			} catch (ClassNotFoundException e) {
+				//e.printStackTrace();
+			}
+			ret.put(objKey, secObj);
+		}
+		return ret;
 	}
 	
 	private static void setOwners(Map<String, Object> data) {

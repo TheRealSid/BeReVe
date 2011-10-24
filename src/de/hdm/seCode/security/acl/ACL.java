@@ -18,8 +18,7 @@ import de.hdm.seCode.security.SecureInterface;
 import de.hdm.seCode.security.acl.PermissionEntity.Scope;
 
 public class ACL extends SecureCallback {
-	//TODO !!!!! Map<Object,SecureInterface> !!!!
-	private Map<Object,Object> instanceList;
+	private Map<Object, SecureInterface> secureInstanceList;
 	private Map<Object, Object> globalObjectsList;
 	private ArrayList<PermissionEntity> permissionList = new ArrayList<PermissionEntity>();
 	private Map<Object,Object> ownerList;
@@ -45,10 +44,6 @@ public class ACL extends SecureCallback {
 	}
 	
 	
-
-	public Map<Object, Object> getInstanceList() {
-		return instanceList;
-	}
 	public Map<Object, Object> getGlobalObjectsList() {
 		return globalObjectsList;
 	}
@@ -59,10 +54,14 @@ public class ACL extends SecureCallback {
 	public Object getOwner(Object o) {
 		return ownerList.get(o);
 	}
+
+	public Map<Object, SecureInterface> getSecureInterfacesList() {
+		return secureInstanceList;
+	}
 	
 	public void parseACLFile() throws ParserConfigurationException, SAXException, IOException {
-		Map<String, Object> data = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml")); 
-		instanceList = (Map<Object, Object>) data.get("objects");
+		Map<String, Object> data = XML2ACLParser.getInstancesFromACLFile(new File("resource/acl.xml"));
+		secureInstanceList = (Map<Object, SecureInterface>) data.get("secureInterfaces");
 		globalObjectsList = (Map<Object, Object>) data.get("global_objects");
 		ownerList = (Map<Object, Object>) data.get("owner_objects");
 		try {

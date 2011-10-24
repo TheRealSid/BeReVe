@@ -29,7 +29,7 @@ public class IdentityManager {
 	}
 	
 	public static Object getSecureObject(Object id) {
-		Object o = acl.getInstanceList().get(id);
+		Object o = acl.getSecureInterfacesList().get(id);
 		Class i;
 		Object so = null;
 		try {
