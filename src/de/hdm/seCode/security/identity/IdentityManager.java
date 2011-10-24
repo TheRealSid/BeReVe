@@ -4,6 +4,7 @@ package de.hdm.seCode.security.identity;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import de.hdm.seCode.security.SecureInterface;
 import de.hdm.seCode.security.SecureProxy;
 import de.hdm.seCode.security.acl.ACL;
 import de.hdm.seCode.security.acl.XML2ACLParser;
@@ -28,8 +29,8 @@ public class IdentityManager {
 		return acl.getGlobalObjectsList().get(id);
 	}
 	
-	public Object getSecureObject(Object id) {
-		Object o = acl.getSecureInterfacesList().get(id);
+	public SecureInterface getSecureObject(Object id) {
+		/*Object o = acl.getSecureInterfacesList().get(id);
 		Class i;
 		Object so = null;
 		try {
@@ -38,7 +39,8 @@ public class IdentityManager {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return so;
+		return so;*/
+		return acl.getSecureInterfacesList().get(id);
 	}
 	
 	public UUID addObject(Object o) {
