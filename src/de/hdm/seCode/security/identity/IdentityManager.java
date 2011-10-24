@@ -24,11 +24,11 @@ public class IdentityManager {
 		acl = ACL.getInstance();
 	}
 	
-	public static Object getGlobalContext(Object id) {
+	public Object getGlobalContext(Object id) {
 		return acl.getGlobalObjectsList().get(id);
 	}
 	
-	public static Object getSecureObject(Object id) {
+	public Object getSecureObject(Object id) {
 		Object o = acl.getSecureInterfacesList().get(id);
 		Class i;
 		Object so = null;

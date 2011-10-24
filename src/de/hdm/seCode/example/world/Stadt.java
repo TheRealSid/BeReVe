@@ -51,8 +51,8 @@ public class Stadt extends SecureCallback{
 	}
 
 	public void go() {
-		SPerson carol = (SPerson) IdentityManager.getSecureObject("carol");
-		SPerson mallory = (SPerson) IdentityManager.getSecureObject("mallory");
+		SPerson carol = (SPerson) IdentityManager.getInstance().getSecureObject("carol");
+		SPerson mallory = (SPerson) IdentityManager.getInstance().getSecureObject("mallory");
 		
 		SPerson bob = (SPerson) SecureProxy.newInstance(new Person("Bob"), this, SPerson.class);
 		SPerson alice = (SPerson) SecureProxy.newInstance(new Person("alice"), this, SPerson.class);

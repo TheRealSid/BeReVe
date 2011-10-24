@@ -14,12 +14,9 @@ public class Client {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		IdentityManager im = IdentityManager.getInstance();
-		ACL acl = ACL.getInstance();
-		//TODO sollte aus IM kommen
-		Stadt stuttgart = (Stadt) im.getGlobalContext("stuttgart");
+		Stadt stuttgart = (Stadt) IdentityManager.getInstance().getGlobalContext("stuttgart");
 		stuttgart.go();
-		
+
 	}
 
 }
