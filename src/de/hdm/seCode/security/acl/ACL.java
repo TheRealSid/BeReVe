@@ -75,6 +75,18 @@ public class ACL extends SecureCallback {
 	public boolean checkPermission(Method m, Object callee, Object caller) {
 		return checkPermission(m.getName(), callee, caller);
 	}
+	public boolean removePermission(PermissionEntity entity, Integer tan, SecureCallback caller){
+		if(caller.getTan().equals(tan)){
+			for(SecureInterface target: entity.getTargetInstances()){
+				if(!target.isOwner(caller,this, createTan())){
+					return false;
+				}
+				return permissionList.remove(entity);
+			}
+		}
+		return false;
+		
+	}
 
 	private Set<PermissionEntity> findPermissionWithRawObject(String method, Object callee, List<PermissionEntity> permissionList){
 		Set<PermissionEntity> result = new HashSet<PermissionEntity>();

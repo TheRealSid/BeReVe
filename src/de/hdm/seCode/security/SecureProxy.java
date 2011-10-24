@@ -22,9 +22,13 @@ public class SecureProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] aobj)
 			throws Exception {
-		if(aobj == null || aobj.length<2){
+		if(aobj == null){
 			Method realMethod = obj.getClass().getMethod(method.getName());
 			return realMethod.invoke(obj);
+		}else if(aobj.length==1){
+			if(method.getName().equals("equals")){
+				return obj.equals(aobj[0]);
+			}
 		}
 		
 		SecureCallback caller = (SecureCallback) aobj[aobj.length - 2];

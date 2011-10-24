@@ -6,7 +6,7 @@ import java.util.List;
 import de.hdm.seCode.security.SecureInterface;
 
 
-public class PermissionEntity {
+public final class  PermissionEntity {
 	public static enum Scope {
 		INSTANCE, CLASS
 	}
@@ -86,4 +86,58 @@ public class PermissionEntity {
 	public List<Object> getCallerInstances() {
 		return callerInstances;
 	}
+	
+	@Override
+	public int hashCode() {
+		return 31;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PermissionEntity other = (PermissionEntity) obj;
+		if (allMethods != other.allMethods)
+			return false;
+		if (callerClass == null) {
+			if (other.callerClass != null)
+				return false;
+		} else if (!callerClass.equals(other.callerClass))
+			return false;
+		if (callerInstances == null) {
+			if (other.callerInstances != null)
+				return false;
+		} else if (!callerInstances.equals(other.callerInstances))
+			return false;
+		if (callerScope != other.callerScope)
+			return false;
+		if (methods == null) {
+			if (other.methods != null)
+				return false;
+		} else if (!methods.equals(other.methods))
+			return false;
+		if (targetClass == null) {
+			if (other.targetClass != null)
+				return false;
+		} else if (!targetClass.equals(other.targetClass))
+			return false;
+		if (targetInstances == null) {
+			if (other.targetInstances != null)
+				return false;
+		} else if (!targetInstances.equals(other.targetInstances))
+			return false;
+		if (targetScope != other.targetScope)
+			return false;
+		return true;
+	}
+	
+	
+
+
+	
+	
 }

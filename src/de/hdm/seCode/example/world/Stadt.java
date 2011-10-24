@@ -56,9 +56,16 @@ public class Stadt extends SecureCallback{
 		
 		SPerson bob = (SPerson) SecureProxy.newInstance(new Person("Bob"), this, SPerson.class);
 		SPerson alice = (SPerson) SecureProxy.newInstance(new Person("alice"), this, SPerson.class);
-		
-		heiraten(bob, alice);
+		alice.setPartner(bob, this, createTan());
+		PermissionEntity permission = new PermissionEntity(Scope.INSTANCE,Scope.INSTANCE,null,null,false).addTarget(bob).addCaller(alice).addMethod("doSex");
+
+		ACL.getInstance().addPermission(permission, createTan(), this);
 		alice.go(this,createTan());
+		
+//		boolean removeOk = ACL.getInstance().removePermission(permission, createTan(), this);
+
+		alice.go(this,createTan());
+
 		carol.go(this,createTan());
 //		mallory.go(this, createTan());
 	}
